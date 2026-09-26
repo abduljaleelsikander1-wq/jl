@@ -4,7 +4,9 @@ A premium, real-time **3D animated commercial** for **NMT Trading LLC**, a whole
 
 It is built as the **left side** of a larger ad layout. The 3D product showcase and the trading activity sit on the left. The right ~45% fades into clean studio negative space, left free for a headline, website, phone number and contact details.
 
-![Still](renders/nmt-trading-commercial-4k.png)
+![Wide composition, 4K still](renders/nmt-trading-commercial-4k.png)
+
+<sub>Product close-up camera (`?shot=hero`): [renders/nmt-trading-hero-4k.png](renders/nmt-trading-hero-4k.png)</sub>
 
 ## What's in the scene
 

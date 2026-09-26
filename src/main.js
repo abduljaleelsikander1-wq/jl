@@ -18,6 +18,7 @@ const params = new URLSearchParams(location.search);
 const CAPTURE = params.has('capture');
 const QUALITY = params.get('q') || 'high';
 const HI = QUALITY !== 'low';
+const MSAA = params.has('aa') ? +params.get('aa') : 4; // ?aa=0 speeds up software rendering
 const LOOP = 24; // seconds — seamless loop length
 const SHOT = params.get('shot') || 'wide'; // 'wide' (default composition) | 'hero' (product close-up)
 
@@ -349,7 +350,7 @@ openCarton({ x: -12.8, z: 1.6, ry: 0.1, factory: () => P.perfume({ style: 0, liq
 // ------------------------------------------------------------------ hero podium
 const HERO = new THREE.Group();
 scene.add(HERO);
-const marble = new THREE.MeshPhysicalMaterial({ color: '#efe6dd', roughness: 0.16, clearcoat: 1, clearcoatRoughness: 0.08, sheen: 0.3 });
+const marble = new THREE.MeshPhysicalMaterial({ color: '#ddd2c6', roughness: 0.16, clearcoat: 1, clearcoatRoughness: 0.08, sheen: 0.3 });
 const podium = new THREE.Group();
 const pod1 = new THREE.Mesh(new THREE.CylinderGeometry(3.3, 3.35, 0.55, 128), marble); pod1.position.y = 0.275;
 const trim1 = new THREE.Mesh(new THREE.TorusGeometry(3.32, 0.035, 12, 160), P.M.gold()); trim1.rotation.x = Math.PI / 2; trim1.position.y = 0.55;
@@ -618,11 +619,11 @@ trails.frustumCulled = false;
 HERO.add(trails);
 
 // ------------------------------------------------------------------ post-processing
-const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: HI ? 4 : 0 }));
+const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: HI ? MSAA : 0 }));
 composer.addPass(new RenderPass(scene, camera));
 const bokeh = new BokehPass(scene, camera, { focus: 30, aperture: 0.0005, maxblur: 0.007 });
 if (HI) composer.addPass(bokeh);
-const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.5, 0.5, 1.0);
+const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.5, 0.5, 1.15);
 composer.addPass(bloom);
 composer.addPass(new OutputPass());
 // Final grade: clean negative space on the right, vignette, fine film grain.

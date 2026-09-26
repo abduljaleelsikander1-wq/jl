@@ -7,6 +7,8 @@ import { labelTexture, paletteTexture, powderTexture } from './textures.js';
 
 // ---------------------------------------------------------------- materials
 const matCache = new Map();
+// Keep light plastics just under pure white so key-lit highlights stay out of the bloom range.
+const tame = (c, k = 0.86) => new THREE.Color(c).multiplyScalar(k);
 function cached(key, make) {
   if (!matCache.has(key)) matCache.set(key, make());
   return matCache.get(key);
@@ -22,8 +24,8 @@ export const M = {
   blackGloss: () => cached('bgl', () => new THREE.MeshPhysicalMaterial({ color: '#0c0c0e', roughness: 0.18, clearcoat: 1, clearcoatRoughness: 0.05 })),
   blackMatte: () => cached('bma', () => new THREE.MeshPhysicalMaterial({ color: '#121113', roughness: 0.62 })),
   rubber: () => cached('rub', () => new THREE.MeshPhysicalMaterial({ color: '#17151a', roughness: 0.75, sheen: 0.4, sheenColor: '#555' })),
-  plastic: (color, rough = 0.32) => cached(`pl${color}${rough}`, () => new THREE.MeshPhysicalMaterial({ color, roughness: rough, clearcoat: 0.6, clearcoatRoughness: 0.2 })),
-  pearl: (color) => cached(`pe${color}`, () => new THREE.MeshPhysicalMaterial({ color, roughness: 0.28, clearcoat: 1, clearcoatRoughness: 0.12, iridescence: 0.35, iridescenceIOR: 1.3, sheen: 0.3, sheenColor: '#ffffff' })),
+  plastic: (color, rough = 0.32) => cached(`pl${color}${rough}`, () => new THREE.MeshPhysicalMaterial({ color: tame(color), roughness: rough, clearcoat: 0.6, clearcoatRoughness: 0.2 })),
+  pearl: (color) => cached(`pe${color}`, () => new THREE.MeshPhysicalMaterial({ color: tame(color), roughness: 0.28, clearcoat: 1, clearcoatRoughness: 0.12, iridescence: 0.35, iridescenceIOR: 1.3, sheen: 0.3, sheenColor: '#ffffff' })),
   glass: (tint = '#ffffff', thickness = 0.3, rough = 0.03) => cached(`gl${tint}${thickness}${rough}`, () => new THREE.MeshPhysicalMaterial({
     color: '#ffffff', metalness: 0, roughness: rough, transmission: 1, thickness, ior: 1.5,
     attenuationColor: tint, attenuationDistance: 0.9, specularIntensity: 1, clearcoat: 1, clearcoatRoughness: 0.02, envMapIntensity: 1.2,
@@ -32,7 +34,7 @@ export const M = {
     color: '#ffffff', roughness: 0.12, transmission: 0.95, thickness: 0.6, ior: 1.45, attenuationColor: tint, attenuationDistance: 0.35, clearcoat: 1,
   })),
   liquid: (color, rough = 0.15) => cached(`lq${color}${rough}`, () => new THREE.MeshPhysicalMaterial({ color, roughness: rough, clearcoat: 1, clearcoatRoughness: 0.05, sheen: 0.2 })),
-  cream: (color = '#fbf6ef') => cached(`cr${color}`, () => new THREE.MeshPhysicalMaterial({ color, roughness: 0.55, sheen: 1, sheenRoughness: 0.4, sheenColor: '#ffffff' })),
+  cream: (color = '#fbf6ef') => cached(`cr${color}`, () => new THREE.MeshPhysicalMaterial({ color: tame(color, 0.84), roughness: 0.55, sheen: 1, sheenRoughness: 0.4, sheenColor: '#ffffff' })),
   lip: (color) => cached(`lip${color}`, () => new THREE.MeshPhysicalMaterial({ color, roughness: 0.28, clearcoat: 0.7, clearcoatRoughness: 0.25, sheen: 0.5, sheenColor: '#ffd6d6' })),
   bristle: (color) => cached(`br${color}`, () => new THREE.MeshPhysicalMaterial({ color, roughness: 0.85, sheen: 1, sheenRoughness: 0.6, sheenColor: '#f5e6d8' })),
   wood: () => cached('wood', () => new THREE.MeshPhysicalMaterial({ color: '#5b3b27', roughness: 0.35, clearcoat: 0.8 })),

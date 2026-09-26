@@ -41,7 +41,7 @@ const browser = await chromium.launch({
 const page = await browser.newPage({ viewport: { width: Math.min(w, 1920), height: Math.min(h, 1080) } });
 page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') console.log('[page]', m.text()); });
 page.on('pageerror', (e) => console.log('[pageerror]', e.message));
-await page.goto(`http://localhost:${port}/index.html?capture&w=${w}&h=${h}&q=${q}&shot=${opt('shot', 'wide')}`);
+await page.goto(`http://localhost:${port}/index.html?capture&w=${w}&h=${h}&q=${q}&shot=${opt('shot', 'wide')}&aa=${opt('aa', 4)}`);
 await page.waitForFunction(() => window.__ready === true, null, { timeout: 180000 });
 
 async function grab(t) {
