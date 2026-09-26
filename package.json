@@ -1,0 +1,16 @@
+{
+  "name": "nmt-trading-3d-commercial",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Real-time 3D animated commercial visual for NMT Trading LLC (cosmetics wholesale & distribution).",
+  "type": "module",
+  "scripts": {
+    "start": "npx http-server . -p 8080 -c-1",
+    "render:still": "node scripts/render.mjs still --w 3840 --h 2160 --t 4 --out renders/nmt-trading-commercial-4k.png",
+    "render:hero": "node scripts/render.mjs still --w 3840 --h 2160 --t 4 --shot hero --out renders/nmt-trading-hero-4k.png",
+    "render:frames": "node scripts/render.mjs frames --w 1920 --h 1080 --fps 30 --dur 24 --out renders/frames"
+  },
+  "devDependencies": {
+    "playwright": "^1.56.1"
+  }
+}
